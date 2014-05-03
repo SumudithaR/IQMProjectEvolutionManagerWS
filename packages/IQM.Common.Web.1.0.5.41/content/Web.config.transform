@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="nhibernateBaseTypes" type="IQM.Common.Configuration.Nhibernate.NhibernateConfigurationSection, IQM.Common" />
+  </configSections>
+
+  <nhibernateBaseTypes>
+    <types>
+    </types>
+  </nhibernateBaseTypes>
+
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false" />
+    <modules runAllManagedModulesForAllRequests="true">
+      <add name="NHibernateSessionModule" type="IQM.Common.Web.Modules.NHibernateSessionModule, IQM.Common.Web" />
+      <add name="LoggingHttpModule" type="IQM.Common.Web.Modules.LoggingHttpModule, IQM.Common.Web" />
+    </modules>
+  </system.webServer>
+</configuration>

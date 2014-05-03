@@ -1,0 +1,698 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="OnTimeModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="OnTimeModelStoreContainer">
+          <EntitySet Name="Projects" EntityType="OnTimeModel.Store.Projects" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReleaseProjects" EntityType="OnTimeModel.Store.ReleaseProjects" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Releases" EntityType="OnTimeModel.Store.Releases" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReleaseStatusTypes" EntityType="OnTimeModel.Store.ReleaseStatusTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReleaseTypes" EntityType="OnTimeModel.Store.ReleaseTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tasks" EntityType="OnTimeModel.Store.Tasks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TimeUnitTypes" EntityType="OnTimeModel.Store.TimeUnitTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="OnTimeModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="WorkLog" EntityType="OnTimeModel.Store.WorkLog" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ReleaseProjects">
+          <Key>
+            <PropertyRef Name="ReleaseId" />
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ReleaseId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Releases">
+          <Key>
+            <PropertyRef Name="ReleaseId" />
+          </Key>
+          <Property Name="ReleaseId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ParentReleaseId" Type="int" Nullable="false" />
+          <Property Name="ReleaseTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="ReleaseStatusTypeId" Type="int" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="VelocityStartDate" Type="datetime" Nullable="false" />
+          <Property Name="ReleaseNotes" Type="ntext" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReleaseStatusTypes">
+          <Key>
+            <PropertyRef Name="ReleaseStatusTypeId" />
+          </Key>
+          <Property Name="ReleaseStatusTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ReleaseTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReleaseTypes">
+          <Key>
+            <PropertyRef Name="ReleaseTypeId" />
+          </Key>
+          <Property Name="ReleaseTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Level" Type="int" Nullable="false" />
+          <Property Name="Icon" Type="image" />
+        </EntityType>
+        <EntityType Name="Tasks">
+          <Key>
+            <PropertyRef Name="TaskId" />
+          </Key>
+          <Property Name="TaskId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TaskNumber" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="ntext" />
+          <Property Name="Notes" Type="ntext" />
+          <Property Name="CategoryTypeId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="CompletionDate" Type="datetime" Nullable="false" />
+          <Property Name="IsCompleted" Type="bit" Nullable="false" />
+          <Property Name="IsPublic" Type="bit" Nullable="false" />
+          <Property Name="AssignedToId" Type="int" Nullable="false" />
+          <Property Name="ReportedById" Type="int" Nullable="false" />
+          <Property Name="CreatedById" Type="int" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="LastUpdatedById" Type="int" Nullable="false" />
+          <Property Name="LastUpdatedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="LastUpdated" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Archived" Type="bit" Nullable="false" />
+          <Property Name="EstimatedDuration" Type="real" Nullable="false" />
+          <Property Name="DurationUnitTypeId" Type="int" Nullable="false" />
+          <Property Name="ActualDuration" Type="real" Nullable="false" />
+          <Property Name="ActualUnitTypeId" Type="int" Nullable="false" />
+          <Property Name="WorkflowStepId" Type="int" Nullable="false" />
+          <Property Name="PriorityTypeId" Type="int" Nullable="false" />
+          <Property Name="RemainingDuration" Type="real" Nullable="false" />
+          <Property Name="RemainingUnitTypeId" Type="int" Nullable="false" />
+          <Property Name="ReleaseId" Type="int" Nullable="false" />
+          <Property Name="StatusTypeId" Type="int" Nullable="false" />
+          <Property Name="PubliclyViewable" Type="bit" Nullable="false" />
+          <Property Name="ReportedByCustomerContactId" Type="int" Nullable="false" />
+          <Property Name="PercentComplete" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeUnitTypes">
+          <Key>
+            <PropertyRef Name="TimeUnitTypeId" />
+          </Key>
+          <Property Name="TimeUnitTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Abbreviation" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="ConversionFactor" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="LoginId" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="WindowsId" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="UseWindowsAuth" Type="bit" Nullable="false" />
+          <Property Name="BuiltInAccount" Type="bit" Nullable="false" />
+          <Property Name="SettingsXml" Type="ntext" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="UseWindowsClient" Type="bit" Nullable="false" />
+          <Property Name="UseWebClient" Type="bit" Nullable="false" />
+          <Property Name="UseVSClient" Type="bit" Nullable="false" />
+          <Property Name="UseMixedMode" Type="bit" Nullable="false" />
+          <Property Name="EnterpriseConnectionType" Type="int" Nullable="false" />
+          <Property Name="UseIPhoneClient" Type="bit" Nullable="false" />
+          <Property Name="LastLoginDateTime" Type="datetime" />
+          <Property Name="ReadMessages" Type="image" Nullable="false" />
+          <Property Name="IPhoneSettings" Type="image" />
+          <Property Name="HasReadUpgradeMessage" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkLog">
+          <Key>
+            <PropertyRef Name="WorkLogId" />
+          </Key>
+          <Property Name="WorkLogId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="WorkLogDateTime" Type="datetime" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="ItemTypeId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="WorkDone" Type="real" Nullable="false" />
+          <Property Name="WorkUnitTypeId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="ntext" Nullable="false" />
+          <Property Name="WorkLogTypeId" Type="int" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnTimeModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OnTime10Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Projects" EntityType="OnTimeModel.Project" />
+          <EntitySet Name="ReleaseProjects" EntityType="OnTimeModel.ReleaseProject" />
+          <EntitySet Name="Releases" EntityType="OnTimeModel.Release" />
+          <EntitySet Name="ReleaseStatusTypes" EntityType="OnTimeModel.ReleaseStatusType" />
+          <EntitySet Name="ReleaseTypes" EntityType="OnTimeModel.ReleaseType" />
+          <EntitySet Name="Tasks" EntityType="OnTimeModel.Task" />
+          <EntitySet Name="TimeUnitTypes" EntityType="OnTimeModel.TimeUnitType" />
+          <EntitySet Name="Users" EntityType="OnTimeModel.User" />
+          <EntitySet Name="WorkLogs" EntityType="OnTimeModel.WorkLog" />
+          <AssociationSet Name="ProjectReleaseProject" Association="OnTimeModel.ProjectReleaseProject">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="ReleaseProject" EntitySet="ReleaseProjects" />
+          </AssociationSet>
+          <AssociationSet Name="ReleaseReleaseProject" Association="OnTimeModel.ReleaseReleaseProject">
+            <End Role="Release" EntitySet="Releases" />
+            <End Role="ReleaseProject" EntitySet="ReleaseProjects" />
+          </AssociationSet>
+          <AssociationSet Name="ReleaseTypeRelease" Association="OnTimeModel.ReleaseTypeRelease">
+            <End Role="ReleaseType" EntitySet="ReleaseTypes" />
+            <End Role="Release" EntitySet="Releases" />
+          </AssociationSet>
+          <AssociationSet Name="ReleaseStatusTypeRelease" Association="OnTimeModel.ReleaseStatusTypeRelease">
+            <End Role="ReleaseStatusType" EntitySet="ReleaseStatusTypes" />
+            <End Role="Release" EntitySet="Releases" />
+          </AssociationSet>
+          <AssociationSet Name="TimeUnitTypeWorkLog" Association="OnTimeModel.TimeUnitTypeWorkLog">
+            <End Role="TimeUnitType" EntitySet="TimeUnitTypes" />
+            <End Role="WorkLog" EntitySet="WorkLogs" />
+          </AssociationSet>
+          <AssociationSet Name="TimeUnitTypeTask" Association="OnTimeModel.ActualTimeUnitType">
+            <End Role="TimeUnitType" EntitySet="TimeUnitTypes" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="TimeUnitTypeTask1" Association="OnTimeModel.RemainingTimeUnitType">
+            <End Role="TimeUnitType" EntitySet="TimeUnitTypes" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="TimeUnitTypeTask2" Association="OnTimeModel.EstimatedTimeUnitType">
+            <End Role="TimeUnitType" EntitySet="TimeUnitTypes" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="TaskWorkLog" Association="OnTimeModel.TaskWorkLog">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="WorkLog" EntitySet="WorkLogs" />
+          </AssociationSet>
+          <AssociationSet Name="ReleaseTask" Association="OnTimeModel.ReleaseTask">
+            <End Role="Release" EntitySet="Releases" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="UserTask" Association="OnTimeModel.UserTask">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ReleaseProjects" Relationship="OnTimeModel.ProjectReleaseProject" FromRole="Project" ToRole="ReleaseProject" />
+        </EntityType>
+        <EntityType Name="ReleaseProject">
+          <Key>
+            <PropertyRef Name="ReleaseId" />
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ReleaseId" Type="Int32" Nullable="false" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="OnTimeModel.ProjectReleaseProject" FromRole="ReleaseProject" ToRole="Project" />
+          <NavigationProperty Name="Release" Relationship="OnTimeModel.ReleaseReleaseProject" FromRole="ReleaseProject" ToRole="Release" />
+        </EntityType>
+        <EntityType Name="Release">
+          <Key>
+            <PropertyRef Name="ReleaseId" />
+          </Key>
+          <Property Name="ReleaseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentReleaseId" Type="Int32" Nullable="false" />
+          <Property Name="ReleaseTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReleaseStatusTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="VelocityStartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReleaseNotes" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ReleaseProjects" Relationship="OnTimeModel.ReleaseReleaseProject" FromRole="Release" ToRole="ReleaseProject" />
+          <NavigationProperty Name="ReleaseType" Relationship="OnTimeModel.ReleaseTypeRelease" FromRole="Release" ToRole="ReleaseType" />
+          <NavigationProperty Name="ReleaseStatusType" Relationship="OnTimeModel.ReleaseStatusTypeRelease" FromRole="Release" ToRole="ReleaseStatusType" />
+          <NavigationProperty Name="Tasks" Relationship="OnTimeModel.ReleaseTask" FromRole="Release" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="ReleaseStatusType">
+          <Key>
+            <PropertyRef Name="ReleaseStatusTypeId" />
+          </Key>
+          <Property Name="ReleaseStatusTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReleaseTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Releases" Relationship="OnTimeModel.ReleaseStatusTypeRelease" FromRole="ReleaseStatusType" ToRole="Release" />
+        </EntityType>
+        <EntityType Name="ReleaseType">
+          <Key>
+            <PropertyRef Name="ReleaseTypeId" />
+          </Key>
+          <Property Name="ReleaseTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Level" Type="Int32" Nullable="false" />
+          <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Releases" Relationship="OnTimeModel.ReleaseTypeRelease" FromRole="ReleaseType" ToRole="Release" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskId" />
+          </Key>
+          <Property Name="TaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskNumber" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Notes" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CategoryTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CompletionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsCompleted" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublic" Type="Boolean" Nullable="false" />
+          <Property Name="AssignedToId" Type="Int32" Nullable="false" />
+          <Property Name="ReportedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastUpdatedById" Type="Int32" Nullable="false" />
+          <Property Name="LastUpdatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastUpdated" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Archived" Type="Boolean" Nullable="false" />
+          <Property Name="EstimatedDuration" Type="Single" Nullable="false" />
+          <Property Name="DurationUnitTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ActualDuration" Type="Single" Nullable="false" />
+          <Property Name="ActualUnitTypeId" Type="Int32" Nullable="false" />
+          <Property Name="WorkflowStepId" Type="Int32" Nullable="false" />
+          <Property Name="PriorityTypeId" Type="Int32" Nullable="false" />
+          <Property Name="RemainingDuration" Type="Single" Nullable="false" />
+          <Property Name="RemainingUnitTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ReleaseId" Type="Int32" Nullable="false" />
+          <Property Name="StatusTypeId" Type="Int32" Nullable="false" />
+          <Property Name="PubliclyViewable" Type="Boolean" Nullable="false" />
+          <Property Name="ReportedByCustomerContactId" Type="Int32" Nullable="false" />
+          <Property Name="PercentComplete" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="ActualTimeUnitType" Relationship="OnTimeModel.ActualTimeUnitType" FromRole="Task" ToRole="TimeUnitType" />
+          <NavigationProperty Name="RemainingTimeUnitType" Relationship="OnTimeModel.RemainingTimeUnitType" FromRole="Task" ToRole="TimeUnitType" />
+          <NavigationProperty Name="EstimatedTimeUnitType" Relationship="OnTimeModel.EstimatedTimeUnitType" FromRole="Task" ToRole="TimeUnitType" />
+          <NavigationProperty Name="WorkLogs" Relationship="OnTimeModel.TaskWorkLog" FromRole="Task" ToRole="WorkLog" />
+          <NavigationProperty Name="Release" Relationship="OnTimeModel.ReleaseTask" FromRole="Task" ToRole="Release" />
+          <NavigationProperty Name="User" Relationship="OnTimeModel.UserTask" FromRole="Task" ToRole="User" />
+        </EntityType>
+        <EntityType Name="TimeUnitType">
+          <Key>
+            <PropertyRef Name="TimeUnitTypeId" />
+          </Key>
+          <Property Name="TimeUnitTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Abbreviation" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="ConversionFactor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WorkLogs" Relationship="OnTimeModel.TimeUnitTypeWorkLog" FromRole="TimeUnitType" ToRole="WorkLog" />
+          <NavigationProperty Name="ActualTimeUnitType" Relationship="OnTimeModel.ActualTimeUnitType" FromRole="TimeUnitType" ToRole="Task" />
+          <NavigationProperty Name="RemainingTimeUnitType" Relationship="OnTimeModel.RemainingTimeUnitType" FromRole="TimeUnitType" ToRole="Task" />
+          <NavigationProperty Name="EstimatedTimeUnitType" Relationship="OnTimeModel.EstimatedTimeUnitType" FromRole="TimeUnitType" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="LoginId" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="WindowsId" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="UseWindowsAuth" Type="Boolean" Nullable="false" />
+          <Property Name="BuiltInAccount" Type="Boolean" Nullable="false" />
+          <Property Name="SettingsXml" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="UseWindowsClient" Type="Boolean" Nullable="false" />
+          <Property Name="UseWebClient" Type="Boolean" Nullable="false" />
+          <Property Name="UseVSClient" Type="Boolean" Nullable="false" />
+          <Property Name="UseMixedMode" Type="Boolean" Nullable="false" />
+          <Property Name="EnterpriseConnectionType" Type="Int32" Nullable="false" />
+          <Property Name="UseIPhoneClient" Type="Boolean" Nullable="false" />
+          <Property Name="LastLoginDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ReadMessages" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="IPhoneSettings" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="HasReadUpgradeMessage" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Tasks" Relationship="OnTimeModel.UserTask" FromRole="User" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="WorkLog">
+          <Key>
+            <PropertyRef Name="WorkLogId" />
+          </Key>
+          <Property Name="WorkLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkLogDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="ItemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="WorkDone" Type="Single" Nullable="false" />
+          <Property Name="WorkUnitTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="WorkLogTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TimeUnitType" Relationship="OnTimeModel.TimeUnitTypeWorkLog" FromRole="WorkLog" ToRole="TimeUnitType" />
+          <NavigationProperty Name="Task" Relationship="OnTimeModel.TaskWorkLog" FromRole="WorkLog" ToRole="Task" />
+        </EntityType>
+        <Association Name="ProjectReleaseProject">
+          <End Type="OnTimeModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="OnTimeModel.ReleaseProject" Role="ReleaseProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="ReleaseProject">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReleaseReleaseProject">
+          <End Type="OnTimeModel.Release" Role="Release" Multiplicity="1" />
+          <End Type="OnTimeModel.ReleaseProject" Role="ReleaseProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Release">
+              <PropertyRef Name="ReleaseId" />
+            </Principal>
+            <Dependent Role="ReleaseProject">
+              <PropertyRef Name="ReleaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReleaseTypeRelease">
+          <End Type="OnTimeModel.ReleaseType" Role="ReleaseType" Multiplicity="1" />
+          <End Type="OnTimeModel.Release" Role="Release" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReleaseType">
+              <PropertyRef Name="ReleaseTypeId" />
+            </Principal>
+            <Dependent Role="Release">
+              <PropertyRef Name="ReleaseTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReleaseStatusTypeRelease">
+          <End Type="OnTimeModel.ReleaseStatusType" Role="ReleaseStatusType" Multiplicity="1" />
+          <End Type="OnTimeModel.Release" Role="Release" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReleaseStatusType">
+              <PropertyRef Name="ReleaseStatusTypeId" />
+            </Principal>
+            <Dependent Role="Release">
+              <PropertyRef Name="ReleaseStatusTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TimeUnitTypeWorkLog">
+          <End Type="OnTimeModel.TimeUnitType" Role="TimeUnitType" Multiplicity="1" />
+          <End Type="OnTimeModel.WorkLog" Role="WorkLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeUnitType">
+              <PropertyRef Name="TimeUnitTypeId" />
+            </Principal>
+            <Dependent Role="WorkLog">
+              <PropertyRef Name="WorkUnitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ActualTimeUnitType">
+          <End Type="OnTimeModel.TimeUnitType" Role="TimeUnitType" Multiplicity="1" />
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeUnitType">
+              <PropertyRef Name="TimeUnitTypeId" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ActualUnitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RemainingTimeUnitType">
+          <End Type="OnTimeModel.TimeUnitType" Role="TimeUnitType" Multiplicity="1" />
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeUnitType">
+              <PropertyRef Name="TimeUnitTypeId" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="RemainingUnitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EstimatedTimeUnitType">
+          <End Type="OnTimeModel.TimeUnitType" Role="TimeUnitType" Multiplicity="1" />
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeUnitType">
+              <PropertyRef Name="TimeUnitTypeId" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="DurationUnitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TaskWorkLog">
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="OnTimeModel.WorkLog" Role="WorkLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskId" />
+            </Principal>
+            <Dependent Role="WorkLog">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReleaseTask">
+          <End Type="OnTimeModel.Release" Role="Release" Multiplicity="1" />
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Release">
+              <PropertyRef Name="ReleaseId" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ReleaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserTask">
+          <End Type="OnTimeModel.User" Role="User" Multiplicity="1" />
+          <End Type="OnTimeModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="AssignedToId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnTimeModelStoreContainer" CdmEntityContainer="OnTime10Entities">
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="OnTimeModel.Project">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReleaseProjects">
+            <EntityTypeMapping TypeName="OnTimeModel.ReleaseProject">
+              <MappingFragment StoreEntitySet="ReleaseProjects">
+                <ScalarProperty Name="ReleaseId" ColumnName="ReleaseId" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Releases">
+            <EntityTypeMapping TypeName="OnTimeModel.Release">
+              <MappingFragment StoreEntitySet="Releases">
+                <ScalarProperty Name="ReleaseId" ColumnName="ReleaseId" />
+                <ScalarProperty Name="ParentReleaseId" ColumnName="ParentReleaseId" />
+                <ScalarProperty Name="ReleaseTypeId" ColumnName="ReleaseTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="ReleaseStatusTypeId" ColumnName="ReleaseStatusTypeId" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="VelocityStartDate" ColumnName="VelocityStartDate" />
+                <ScalarProperty Name="ReleaseNotes" ColumnName="ReleaseNotes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReleaseStatusTypes">
+            <EntityTypeMapping TypeName="OnTimeModel.ReleaseStatusType">
+              <MappingFragment StoreEntitySet="ReleaseStatusTypes">
+                <ScalarProperty Name="ReleaseStatusTypeId" ColumnName="ReleaseStatusTypeId" />
+                <ScalarProperty Name="ReleaseTypeId" ColumnName="ReleaseTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReleaseTypes">
+            <EntityTypeMapping TypeName="OnTimeModel.ReleaseType">
+              <MappingFragment StoreEntitySet="ReleaseTypes">
+                <ScalarProperty Name="ReleaseTypeId" ColumnName="ReleaseTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tasks">
+            <EntityTypeMapping TypeName="OnTimeModel.Task">
+              <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+                <ScalarProperty Name="TaskNumber" ColumnName="TaskNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="CategoryTypeId" ColumnName="CategoryTypeId" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
+                <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+                <ScalarProperty Name="AssignedToId" ColumnName="AssignedToId" />
+                <ScalarProperty Name="ReportedById" ColumnName="ReportedById" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="LastUpdatedById" ColumnName="LastUpdatedById" />
+                <ScalarProperty Name="LastUpdatedDateTime" ColumnName="LastUpdatedDateTime" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="EstimatedDuration" ColumnName="EstimatedDuration" />
+                <ScalarProperty Name="DurationUnitTypeId" ColumnName="DurationUnitTypeId" />
+                <ScalarProperty Name="ActualDuration" ColumnName="ActualDuration" />
+                <ScalarProperty Name="ActualUnitTypeId" ColumnName="ActualUnitTypeId" />
+                <ScalarProperty Name="WorkflowStepId" ColumnName="WorkflowStepId" />
+                <ScalarProperty Name="PriorityTypeId" ColumnName="PriorityTypeId" />
+                <ScalarProperty Name="RemainingDuration" ColumnName="RemainingDuration" />
+                <ScalarProperty Name="RemainingUnitTypeId" ColumnName="RemainingUnitTypeId" />
+                <ScalarProperty Name="ReleaseId" ColumnName="ReleaseId" />
+                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
+                <ScalarProperty Name="PubliclyViewable" ColumnName="PubliclyViewable" />
+                <ScalarProperty Name="ReportedByCustomerContactId" ColumnName="ReportedByCustomerContactId" />
+                <ScalarProperty Name="PercentComplete" ColumnName="PercentComplete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeUnitTypes">
+            <EntityTypeMapping TypeName="OnTimeModel.TimeUnitType">
+              <MappingFragment StoreEntitySet="TimeUnitTypes">
+                <ScalarProperty Name="TimeUnitTypeId" ColumnName="TimeUnitTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="ConversionFactor" ColumnName="ConversionFactor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="OnTimeModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="WindowsId" ColumnName="WindowsId" />
+                <ScalarProperty Name="UseWindowsAuth" ColumnName="UseWindowsAuth" />
+                <ScalarProperty Name="BuiltInAccount" ColumnName="BuiltInAccount" />
+                <ScalarProperty Name="SettingsXml" ColumnName="SettingsXml" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UseWindowsClient" ColumnName="UseWindowsClient" />
+                <ScalarProperty Name="UseWebClient" ColumnName="UseWebClient" />
+                <ScalarProperty Name="UseVSClient" ColumnName="UseVSClient" />
+                <ScalarProperty Name="UseMixedMode" ColumnName="UseMixedMode" />
+                <ScalarProperty Name="EnterpriseConnectionType" ColumnName="EnterpriseConnectionType" />
+                <ScalarProperty Name="UseIPhoneClient" ColumnName="UseIPhoneClient" />
+                <ScalarProperty Name="LastLoginDateTime" ColumnName="LastLoginDateTime" />
+                <ScalarProperty Name="ReadMessages" ColumnName="ReadMessages" />
+                <ScalarProperty Name="IPhoneSettings" ColumnName="IPhoneSettings" />
+                <ScalarProperty Name="HasReadUpgradeMessage" ColumnName="HasReadUpgradeMessage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkLogs">
+            <EntityTypeMapping TypeName="OnTimeModel.WorkLog">
+              <MappingFragment StoreEntitySet="WorkLog">
+                <ScalarProperty Name="WorkLogId" ColumnName="WorkLogId" />
+                <ScalarProperty Name="WorkLogDateTime" ColumnName="WorkLogDateTime" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="WorkDone" ColumnName="WorkDone" />
+                <ScalarProperty Name="WorkUnitTypeId" ColumnName="WorkUnitTypeId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="WorkLogTypeId" ColumnName="WorkLogTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
