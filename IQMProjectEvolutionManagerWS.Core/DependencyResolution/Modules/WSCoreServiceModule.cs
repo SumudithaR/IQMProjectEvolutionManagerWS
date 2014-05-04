@@ -1,24 +1,20 @@
 ﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
 using IQMProjectEvolutionManagerWS.Core.Services;
 using Ninject.Modules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IQMProjectEvolutionManagerWS.Dependecy.Modules
+namespace IQMProjectEvolutionManagerWS.Core.DependencyResolution.Modules
 {
     /// <summary>
     /// The data service module
     /// </summary>
-    public class WSCoreServiceModule : NinjectModule
+    public class WsCoreServiceModule : NinjectModule
     {
         /// <summary>
         /// Loads the module into the kernel.
         /// </summary>
         public override void Load()
         {
+            // Bind each of the concrete services to their implementing interfaces. 
             Bind<IOnTimeProjectService>().To<OnTimeProjectService>();
             Bind<IOnTimeReleaseProjectService>().To<OnTimeReleaseProjectService>();
             Bind<IOnTimeReleaseService>().To<OnTimeReleaseService>();

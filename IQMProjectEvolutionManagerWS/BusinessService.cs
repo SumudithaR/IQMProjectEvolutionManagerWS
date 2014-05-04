@@ -1,60 +1,72 @@
-﻿using IQMProjectEvolutionManagerWS.Business.Handlers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IQMProjectEvolutionManagerWS.Business.Handlers;
 
-namespace IQMProjectEvolutionManager
+namespace IQMProjectEvolutionManagerWS
 {
     public partial class BusinessService : ServiceBase
     {
-        private CancellationTokenSource cancellationTokenSource;
-        private BaseHandler baseProcess;
+        /// <summary>
+        /// The _cancellation token source
+        /// </summary>
+        private CancellationTokenSource _cancellationTokenSource;
 
+        /// <summary>
+        /// The _base process
+        /// </summary>
+        private BaseHandler _baseProcess;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BusinessService"/> class.
+        /// </summary>
         public BusinessService()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// When implemented in a derived class, executes when a Start command is sent to the service by the Service Control Manager (SCM) or when the operating system starts (for a service that starts automatically). Specifies actions to take when the service starts.
+        /// </summary>
+        /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
-            cancellationTokenSource = new CancellationTokenSource();
-            var token = cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
 
             Task.Factory.StartNew(() =>
             {
-                baseProcess = new BaseHandler();
+                _baseProcess = new BaseHandler();
 
                 while (true)
                 {
-                    baseProcess.Start();
+                    _baseProcess.Start();
                     Thread.Sleep(TimeSpan.FromMilliseconds(
                         double.Parse(ConfigurationManager.AppSettings["RefreshPeriod"])));
 
-                    if (token.IsCancellationRequested)
-                    {
-                        Console.WriteLine("IQM Project Evolution Manager Business Service has been stopped.");
-                        break;
-                    }
+                    if (!token.IsCancellationRequested) continue;
+                    Console.WriteLine("IQM Project Evolution Manager Business Service has been stopped.");
+                    break;
                 }
 
-                baseProcess = null;
+                _baseProcess = null;
 
             }, token);
         }
 
+        /// <summary>
+        /// When implemented in a derived class, executes when a Stop command is sent to the service by the Service Control Manager (SCM). Specifies actions to take when a service stops running.
+        /// </summary>
         protected override void OnStop()
         {
-            cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
         }
 
+        /// <summary>
+        /// Called when [debug].
+        /// </summary>
         public void OnDebug()
         {
             OnStart(null);

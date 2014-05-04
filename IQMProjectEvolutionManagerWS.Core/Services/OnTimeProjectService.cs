@@ -1,40 +1,41 @@
-﻿using IQMProjectEvolutionManagerWS.Core.Interfaces;
-using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
 using IQMProjectEvolutionManagerWS.Data;
 using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
 using IQMProjectEvolutionManagerWS.Data.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IQMProjectEvolutionManagerWS.Core.Services
 {
+    /// <summary>
+    /// The service to interact with the OnTime Project repository. 
+    /// </summary>
     public class OnTimeProjectService : IOnTimeProjectService
     {
-        private readonly IOnTimeRepository<Project> repository;
+        private readonly IOnTimeRepository<Project> _repository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OnTimeProjectService"/> class.
+        /// Initializes a new instance of the <see cref="OnTimeProjectService" /> class.
         /// </summary>
         public OnTimeProjectService()
         {
-            repository = new OnTimeRepository<Project>();
+            _repository = new OnTimeRepository<Project>();
         }
 
+        /// <summary>
+        /// Gets all.
+        /// </summary>
+        /// <param name="onlyActive">if set to <c>true</c> [only active].</param>
+        /// <returns></returns>
         public IList<Project> GetAll(bool onlyActive)
         {
-            if (onlyActive)
-            {
-                Expression<Func<Project, bool>> expression = proj => proj.IsActive;
-                return repository.GetAll(expression);
-            }
-            else
-            {
-                return repository.GetAll();
-            }
+            // Return all Projects if they should not be filtered to only include the active ones. 
+            if (!onlyActive) return _repository.GetAll();
+
+            // Otherwise get only the active Projects
+            Expression<Func<Project, bool>> expression = proj => proj.IsActive;
+            return _repository.GetAll(expression);
         }
     }
 }

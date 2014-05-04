@@ -1,0 +1,45 @@
+﻿<?xml version="1.0"?>
+<project name="IQMProjectEvolutionManagerWS" default="all">
+
+  <target name="all" />
+
+  <property name="build.debug" value="false" />
+  <property name="build.dir" value="build" />
+  <property name="service.build.dir" value="IQMProjectEvolutionManagerWS\build" />
+  <property name="service.name" value="IQM Project Evolution Manager Service" />
+
+  <property name="MSBuildPath" value="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" />
+  <property name="SolutionFile" value="IQMProjectEvolutionManagerWS.sln" />
+  <target name="Build" >
+    <exec program="${MSBuildPath}">
+      <arg line='"${SolutionFile}"' />
+      <arg line='/p:OutDir=${build.dir}'/>
+    </exec>
+  </target>
+
+  <target name="stop" description="stops the service">
+    <echo message="Stopping the IQProject Evolution Manager ServiceM ..." />
+    <servicecontroller action="Stop" service="${service.name}" if="${service::is-installed(service.name,'.') and service::is-running(service.name,'.')}" />
+  </target>
+
+  <target name="uninstall" description="uninstalls the service" depends="stop">
+    <echo message="Uninstalling the IQProject Evolution Manager Service..." />
+    <exec program="${framework::get-framework-directory('net-4.0')}\InstallUtil.exe" if="${service::is-installed(service.name,'.')}">
+      <arg value="/u" />
+      <arg value="${service.build.dir}/${project::get-name()}.exe" />
+    </exec>
+  </target>
+
+  <target name="install" description="installs the service" depends="uninstall, Build">
+    <echo message="Installing the IQProject Evolution Manager Service..." />
+    <exec program="${framework::get-framework-directory('net-4.0')}\InstallUtil.exe">
+      <arg value="${service.build.dir}/${project::get-name()}.exe" />
+    </exec>
+  </target>
+
+  <target name="start" description="starts the service">
+    <echo message="Starting the IQProject Evolution Manager Service..." />
+    <servicecontroller action="Start" service="${service.name}" if="${service::is-installed(service.name,'.') and service::is-stopped(service.name,'.')}" />
+  </target>
+
+</project>

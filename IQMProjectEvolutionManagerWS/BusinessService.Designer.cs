@@ -1,4 +1,4 @@
-﻿namespace IQMProjectEvolutionManager
+﻿namespace IQMProjectEvolutionManagerWS
 {
     partial class BusinessService
     {

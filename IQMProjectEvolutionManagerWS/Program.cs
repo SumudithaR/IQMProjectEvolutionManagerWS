@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 
-namespace IQMProjectEvolutionManager
+namespace IQMProjectEvolutionManagerWS
 {
     static class Program
     {
@@ -14,13 +9,17 @@ namespace IQMProjectEvolutionManager
         /// </summary>
         static void Main()
         {
-#if DEBUG
-            var businessService = new BusinessService();
-            businessService.OnDebug();
-            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
-#else
-            ServiceBase.Run(new BusinessService());
-#endif
+//#if DEBUG
+//            var businessService = new BusinessService();
+//            businessService.OnDebug();
+//            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
+//#else
+            var servicesToRun = new ServiceBase[]
+            {
+                new BusinessService()
+            };
+            ServiceBase.Run(servicesToRun);
+//#endif
         }
     }
 }

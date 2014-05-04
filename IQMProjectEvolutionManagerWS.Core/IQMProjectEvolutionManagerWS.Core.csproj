@@ -73,7 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyResolution\Modules\WSCoreServiceModule.cs" />
+    <Compile Include="DependencyResolution\Modules\WsCoreServiceModule.cs" />
     <Compile Include="Interfaces\Services\IOnTimeProjectService.cs" />
     <Compile Include="Interfaces\Services\IOnTimeReleaseProjectService.cs" />
     <Compile Include="Interfaces\Services\IOnTimeReleaseService.cs" />
@@ -96,6 +96,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="default.doxygen" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
