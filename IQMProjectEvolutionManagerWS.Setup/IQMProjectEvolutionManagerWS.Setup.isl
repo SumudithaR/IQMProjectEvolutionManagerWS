@@ -2638,7 +2638,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>1033</td><td>IQM Software</td><td>0</td><td/><td>581080940</td></row>
+		<row><td>COMPANY_NAME</td><td>1033</td><td>IQM Software</td><td>0</td><td/><td>581094837</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1033</td><td>Always Install</td><td>0</td><td/><td>581089100</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1033</td><td>The color settings of your system are not adequate for running [ProductName].</td><td>0</td><td/><td>581089100</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40CLIENT</td><td>1033</td><td>Microsoft .NET Framework 4.0 Client Package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>581089325</td></row>
@@ -3742,8 +3742,8 @@
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>581089100</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>581089100</td></row>
 		<row><td>ID_STRING1</td><td>1033</td><td/><td>0</td><td/><td>581089100</td></row>
-		<row><td>ID_STRING2</td><td>1033</td><td>http://www.iqmsoftware.co.uk/</td><td>0</td><td/><td>581091341</td></row>
-		<row><td>ID_STRING3</td><td>1033</td><td>IQM Software</td><td>0</td><td/><td>581080940</td></row>
+		<row><td>ID_STRING2</td><td>1033</td><td>http://www.IQMSoftware.com</td><td>0</td><td/><td>581094837</td></row>
+		<row><td>ID_STRING3</td><td>1033</td><td>IQM Software</td><td>0</td><td/><td>581094837</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>581089100</td></row>
 	</table>
 
@@ -3984,7 +3984,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{C42A2D99-B411-43F0-A1A1-10A14D843C81}</td></row>
 		<row><td>ISUSSignature</td><td>{D8261532-F4ED-45C2-8E06-B821A06BC72D}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewInstallScriptStd</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewInstallScriptStd,viewISToday</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>

@@ -1,18 +1,27 @@
-﻿using IQM.Common.Test.Core;
-using IQMProjectEvolutionManager.Core;
-using IQMProjectEvolutionManager.Core.Domain;
-using IQMProjectEvolutionManager.Core.Enums;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SetupDataFixture.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014
+// </copyright>
+// <summary>
+//   The setup data fixture.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Tests
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
+    using IQM.Common.Test.Core;
+
+    using IQMProjectEvolutionManager.Core;
+    using IQMProjectEvolutionManager.Core.Domain;
+    using IQMProjectEvolutionManager.Core.Enums;
+
+    using NUnit.Framework;
+
     /// <summary>
-    /// 
+    /// The setup data fixture.
     /// </summary>
     [TestFixture]
     public class SetupDataFixture : NHibernateTestFixtureBase
@@ -37,9 +46,10 @@ namespace IQMProjectEvolutionManagerWS.Tests
         /// <summary>
         /// Creates the initial data.
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1500:CurlyBracketsForMultiLineStatementsMustNotShareLine",
+            Justification = "Reviewed. Suppression is OK here.")][SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:DoNotPlaceRegionsWithinElements", Justification = "Reviewed. Suppression is OK here.")]
         public override void CreateInitialData()
         {
-
             // Stores all the objects to be saved to the database. 
             var objectsToSave = new List<object>();
 
@@ -91,6 +101,9 @@ namespace IQMProjectEvolutionManagerWS.Tests
             #endregion
         }
 
+        /// <summary>
+        /// The create database.
+        /// </summary>
         [Test]
         public void CreateDatabase()
         {
