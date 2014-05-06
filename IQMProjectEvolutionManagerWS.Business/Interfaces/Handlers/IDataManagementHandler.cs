@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers
 {
+    using IQMProjectEvolutionManagerWS.Business.Handlers;
+    using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
+
     public interface IDataManagementHandler
     {
-        void InsertReleasesByPreference();
-        void InsertStaffMembers();
-        void InsertReleaseTypes();
-        void InsertReleaseStatusTypes();
+        //void Run(IDependencyResolver _dependencyResolver, NotifyHandler _notifyHandler);
     }
 }

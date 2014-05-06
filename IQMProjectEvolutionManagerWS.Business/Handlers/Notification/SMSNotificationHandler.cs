@@ -28,7 +28,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
             var userNotifierService = dependencyResolver.GetKernel().Get<ISubscriberNotifierService>();
 
-            var subscribers = dependencyResolver.GetKernel().Get<ISubscriberService>().GetSMSubscribers(true);
+            var subscribers = dependencyResolver.GetKernel().Get<ISubscriberService>().GetSmsSubscribers(true);
             var userNotifierPurpose = dependencyResolver.GetKernel().Get<ISubscriberNotifierPurposeService>().GetByName("Release");
             var userNotifierType = dependencyResolver.GetKernel().Get<ISubscriberNotifierTypeService>().GetByName("SMS");
 
@@ -53,7 +53,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                 foreach (var notifier in smsNotifiers)
                 {
-                    if (notifier != null && (release.DueDate - DateTime.Now).Days == notifier.Subscriber.SMSNotificationPeriod)
+                    if (notifier != null && DateTime.Now.AddDays(notifier.Subscriber.SmsNotificationPeriod) == release.DueDate)
                     {
                         var proceed = true;
 
@@ -90,10 +90,10 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                             var smsMessage = new GenericSMS()
                             {
-                                Message = "The release: " + release.Name + ", linked to the project(s): " + linkedProjects + ", is due on: " + release.DueDate.ToShortDateString() + 
-                                ". The release statistics are as follows. The percentage complete is: " + release.PercentageComplete + ", The total hours worked " + release.HoursWorked + 
-                                ", The total hours remaining is: " + release.HoursRemaining,
-                                Mobile = notifier.AccessName
+                                Message = "The release: " + release.Name + ", linked to the project(s): " + linkedProjects + ", is due on: " + release.DueDate.ToShortDateString() +
+                                ". The release statistics are as follows. The percentage complete is: " + release.PercentageComplete + "%, The total hours worked is: " + release.HoursWorked +
+                                ", The total hours remaining is: " + release.HoursRemaining + ".",
+                                Mobile = notifier.Subscriber.Mobile
                             };
 
                             smsMessage.GenericSMSId = smsService.SendSMS(smsMessage);

@@ -138,6 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolution\Resolver\DependencyResolver.cs" />
+    <Compile Include="Handlers\DataCleanupHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\DataUpdateHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Handlers\Notification\CalendarNotificationHandler.cs" />
     <Compile Include="Handlers\Notification\SMSNotificationHandler.cs" />
     <Compile Include="Interfaces\DependencyResolution\Resolver\IDependencyResolver.cs" />
@@ -145,7 +151,6 @@
     <Compile Include="Interfaces\Handlers\IDataManagementHandler.cs" />
     <Compile Include="Interfaces\Handlers\INotifyHandler.cs" />
     <Compile Include="Handlers\BaseHandler.cs" />
-    <Compile Include="Handlers\DataManagementHandler.cs" />
     <Compile Include="Handlers\NotifyHandler.cs" />
     <Compile Include="Interfaces\Handlers\Notification\ICalendarNotificationHandler.cs" />
     <Compile Include="Interfaces\Handlers\Notification\ISMSNotificationHandler.cs" />

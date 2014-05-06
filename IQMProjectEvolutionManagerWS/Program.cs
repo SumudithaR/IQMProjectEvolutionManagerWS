@@ -9,17 +9,17 @@ namespace IQMProjectEvolutionManagerWS
         /// </summary>
         static void Main()
         {
-//#if DEBUG
-//            var businessService = new BusinessService();
-//            businessService.OnDebug();
-//            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
-//#else
+#if DEBUG
+            var businessService = new BusinessService();
+            businessService.OnDebug();
+            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
+#else
             var servicesToRun = new ServiceBase[]
             {
                 new BusinessService()
             };
             ServiceBase.Run(servicesToRun);
-//#endif
+#endif
         }
     }
 }

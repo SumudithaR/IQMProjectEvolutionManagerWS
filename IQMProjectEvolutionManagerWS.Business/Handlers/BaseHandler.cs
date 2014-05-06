@@ -13,6 +13,10 @@ using System.Text;
 
 namespace IQMProjectEvolutionManagerWS.Business.Handlers
 {
+    using System.Configuration;
+
+    using NHibernate.Cfg;
+
     public class BaseHandler : IBaseHandler
     {
         private readonly IDependencyResolver dependencyResolver;
@@ -29,18 +33,15 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
             dependencyResolver = new DependencyResolver(modules);
         }
 
-        protected void RunDataManagementProcess()
+        protected void RunDataProcesses()
         {
-            var dataManagementHandler = new DataManagementHandler(dependencyResolver, new NotifyHandler(dependencyResolver));
-            dataManagementHandler.InsertReleaseTypes();
-            dataManagementHandler.InsertReleaseStatusTypes();
-            dataManagementHandler.InsertStaffMembers();
-            dataManagementHandler.InsertReleasesByPreference();
+            DataUpdateHandler.Run(dependencyResolver, new NotifyHandler(dependencyResolver));
+            DataCleanupHandler.Run(dependencyResolver, int.Parse(ConfigurationManager.AppSettings["DataCleanupFilterDays"]));
         }
 
         public void Start()
         {
-            RunDataManagementProcess();
+            RunDataProcesses();
         }
     }
 }

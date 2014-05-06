@@ -51,7 +51,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                 foreach (var notifier in releaseCalendarNotifiers)
                 {
-                    var calendarService = dependencyResolver.GetKernel().Get<ICalendarService>(new ConstructorArgument("accessName", notifier.AccessName));
+                    var calendarService = dependencyResolver.GetKernel().Get<ICalendarService>(new ConstructorArgument("accessName", notifier.Subscriber.Email));
                     var calendar = new GenericCalendar();
 
                     if (notifier.AccessId == null || notifier.AccessId.Equals(string.Empty) || calendarService.GetCalendar(notifier.AccessId) == null)
@@ -85,7 +85,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                 foreach (var notifier in calendarNotifiers)
                 {
-                    var calendarService = dependencyResolver.GetKernel().Get<ICalendarService>(new ConstructorArgument("accessName", notifier.AccessName));
+                    var calendarService = dependencyResolver.GetKernel().Get<ICalendarService>(new ConstructorArgument("accessName", notifier.Subscriber.Email));
                     var logEntry = userNotifierLogService.GetByRegisteredForId(notifier, release.ReleaseId);
 
                     if (logEntry != null && !logEntry.TransactionId.Equals(string.Empty) && calendarService.GetEvent(logEntry.TransactionId, notifier.AccessId) != null)
