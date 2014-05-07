@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GenericInstantMessage.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   Defines the GenericInstantMessage type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Notify.Domain
 {
-    class GenericInstantMessage
+    /// <summary>
+    /// The generic instant message.
+    /// </summary>
+    public class GenericInstantMessage
     {
     }
 }

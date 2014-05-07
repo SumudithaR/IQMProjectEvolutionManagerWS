@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ninject;
-using IQMProjectEvolutionManager.Core.Domain;
-using System.Configuration;
-using IQMProjectEvolutionManagerWS.Business.Utility;
-using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
-using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
-using IQMProjectEvolutionManager.Core.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DataUpdateHandler.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The data update handler.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Business.Handlers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+
+    using IQMProjectEvolutionManager.Core.Domain;
+    using IQMProjectEvolutionManager.Core.Interfaces.Services;
+
+    using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
+    using IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers;
+    using IQMProjectEvolutionManagerWS.Business.Utility;
+    using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+
+    using Ninject;
 
     /// <summary>
     /// The data update handler.
@@ -32,17 +43,16 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         /// <summary>
         /// The run.
         /// </summary>
-        /// <param name="_dependencyResolver">
-        /// The _dependency resolver.
+        /// <param name="dependencyResolver">
+        /// The dependency Resolver.
         /// </param>
-        /// <param name="_notifyHandler">
-        /// The _notify handler.
+        /// <param name="notifyHandler">
+        /// The notify Handler.
         /// </param>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        public static void Run(IDependencyResolver _dependencyResolver, NotifyHandler _notifyHandler)
+        public static void Run(IDependencyResolver dependencyResolver, NotifyHandler notifyHandler)
         {
-            DataUpdateHandler.dependencyResolver = _dependencyResolver;
-            DataUpdateHandler.notifyHandler = _notifyHandler;
+            DataUpdateHandler.dependencyResolver = dependencyResolver;
+            DataUpdateHandler.notifyHandler = notifyHandler;
 
             InsertReleaseTypes();
             InsertReleaseStatusTypes();
@@ -57,24 +67,26 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         /// <param name="domainRelease">The domain release.</param>
         private static void InsertProjectsForRelease(Data.Release release, ref Release domainRelease)
         {
-            var releaseOfProject = dependencyResolver.GetKernel().Get<IOnTimeReleaseService>().GetReleaseOfProject(release);
-            var projectsAssociatedWithRelease = dependencyResolver.GetKernel().Get<IOnTimeReleaseProjectService>().GetAssociatedProjects(releaseOfProject);
+            var releaseOfProject =
+                dependencyResolver.GetKernel().Get<IOnTimeReleaseService>().GetReleaseOfProject(release);
+            var projectsAssociatedWithRelease =
+                dependencyResolver.GetKernel()
+                    .Get<IOnTimeReleaseProjectService>()
+                    .GetAssociatedProjects(releaseOfProject);
 
-            foreach (var project in projectsAssociatedWithRelease)
+            foreach (var domainProject in from project in projectsAssociatedWithRelease
+                                          where project != null
+                                          select
+                                              new Project
+                                                  {
+                                                      OnTimeId = project.ProjectId,
+                                                      Name = project.Name,
+                                                      IsActive = project.IsActive
+                                                  })
             {
-                if (project != null)
-                {
-                    var domainProject = new Project
-                    {
-                        OnTimeId = project.ProjectId,
-                        Name = project.Name,
-                        IsActive = project.IsActive
-                    };
+                InsertReleaseProjectForRelease(domainProject, ref domainRelease);
 
-                    InsertReleaseProjectForRelease(domainProject, ref domainRelease);
-
-                    dependencyResolver.GetKernel().Get<IProjectService>().Update(domainProject);
-                }
+                dependencyResolver.GetKernel().Get<IProjectService>().Update(domainProject);
             }
         }
 
@@ -85,18 +97,20 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         /// <param name="domainRelease">The domain release.</param>
         private static void InsertReleaseProjectForRelease(Project domainProject, ref Release domainRelease)
         {
-            if (domainRelease != null && domainProject != null)
+            if (domainRelease == null || domainProject == null)
             {
-                var domainReleaseProject = new ReleaseProject
-                {
-                    Release = domainRelease,
-                    Project = dependencyResolver.GetKernel().Get<IProjectService>().GetByOnTimeId(domainProject.OnTimeId) ?? domainProject
-                };
+                return;
+            }
 
-                if (!dependencyResolver.GetKernel().Get<IReleaseProjectService>().InDatabaseByOnTimeId(domainReleaseProject))
-                {
-                    domainRelease.ReleaseProjects.Add(domainReleaseProject);
-                }
+            var domainReleaseProject = new ReleaseProject
+                                           {
+                                               Release = domainRelease,
+                                               Project = dependencyResolver.GetKernel().Get<IProjectService>().GetByOnTimeId(domainProject.OnTimeId) ?? domainProject
+                                           };
+
+            if (!dependencyResolver.GetKernel().Get<IReleaseProjectService>().InDatabaseByOnTimeId(domainReleaseProject))
+            {
+                domainRelease.ReleaseProjects.Add(domainReleaseProject);
             }
         }
 
@@ -107,51 +121,52 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         /// <param name="domainRelease">The domain release.</param>
         private static void InsertStatisticsForRelease(Data.Release release, ref Release domainRelease)
         {
-            if (release != null && domainRelease != null)
+            if (release == null || domainRelease == null)
             {
-                var tasks = dependencyResolver.GetKernel().Get<IOnTimeTaskService>().GetByRelease(release);
+                return;
+            }
 
-                var releaseWorkLogs = new List<ReleaseWorkLog>();
+            var tasks = dependencyResolver.GetKernel().Get<IOnTimeTaskService>().GetByRelease(release);
 
-                foreach (var task in tasks)
+            var releaseWorkLogs = new List<ReleaseWorkLog>();
+
+            foreach (var task in tasks)
+            {
+                var statistics = CalculateStatistics(task);
+
+                domainRelease.HoursWorked += statistics["hoursWorkedForTask"];
+                domainRelease.HoursRemaining += statistics["hoursRemainingForTask"];
+                domainRelease.OriginalEstimateForAllTasks += statistics["originalEstimateHours"];
+
+                UpdateReleaseWorkLogs(task, ref releaseWorkLogs, statistics);
+            }
+
+            domainRelease.PercentageComplete = domainRelease.OriginalEstimateForAllTasks.Equals(0.0f)
+                                                   ? 0 : domainRelease.HoursWorked / domainRelease.OriginalEstimateForAllTasks * 100;
+
+            foreach (var releaseWorkLog in releaseWorkLogs.Where(releaseWorkLog => releaseWorkLog != null))
+            {
+                releaseWorkLog.Release = domainRelease;
+                if (!dependencyResolver.GetKernel().Get<IReleaseWorkLogService>().Update(releaseWorkLog))
                 {
-                    var statistics = CalculateStatistics(task);
-
-                    domainRelease.HoursWorked += statistics["hoursWorkedForTask"];
-                    domainRelease.HoursRemaining += statistics["hoursRemainingForTask"];
-                    domainRelease.OriginalEstimateForAllTasks += statistics["originalEstimateHours"];
-
-                    UpdateReleaseWorkLogs(task, ref releaseWorkLogs, statistics);
-                }
-
-                domainRelease.PercentageComplete = (domainRelease.OriginalEstimateForAllTasks.Equals(0.0f))
-                    ? 0 : domainRelease.HoursWorked / domainRelease.OriginalEstimateForAllTasks * 100;
-
-                foreach (var releaseWorkLog in releaseWorkLogs)
-                {
-                    if (releaseWorkLog != null)
-                    {
-                        releaseWorkLog.Release = domainRelease;
-                        if (!dependencyResolver.GetKernel().Get<IReleaseWorkLogService>().Update(releaseWorkLog))
-                        {
-                            domainRelease.ReleaseWorkLogs.Add(releaseWorkLog);
-                        }
-                    }
+                    domainRelease.ReleaseWorkLogs.Add(releaseWorkLog);
                 }
             }
         }
 
         /// <summary>
-        /// Calculates the statistics from task.
+        /// The calculate statistics.
         /// </summary>
-        /// <param name="task">The task.</param>
-        /// <returns></returns>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary"/>.
+        /// </returns>
         private static Dictionary<string, float> CalculateStatistics(Data.Task task)
         {
             var hoursWorkedThisWeek = 0.0f;
-            //var hoursWorkedForTask = 0.0f;
             var hoursRemainingForTask = 0.0f;
-            //var originalEstimateHours = 0.0f;
 
             if (task.WorkLogs.Any())
             {
@@ -175,12 +190,12 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
             }
 
             var statistics = new Dictionary<string, float>
-            {
-                {"hoursWorkedThisWeek", hoursWorkedThisWeek},
-                {"hoursWorkedForTask", hoursWorkedForTask},
-                {"hoursRemainingForTask", hoursRemainingForTask},
-                {"originalEstimateHours", originalEstimateHours}
-            };
+                                 {
+                                     { "hoursWorkedThisWeek", hoursWorkedThisWeek },
+                                     { "hoursWorkedForTask", hoursWorkedForTask },
+                                     { "hoursRemainingForTask", hoursRemainingForTask },
+                                     { "originalEstimateHours", originalEstimateHours }
+                                 };
 
             return statistics;
         }
@@ -195,34 +210,36 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         {
             var taskUserId = -1;
 
-            if (task != null && statistics != null)
+            if (task == null || statistics == null)
             {
-                if (task.User != null)
-                {
-                    taskUserId = task.User.UserId;
-                }
+                return;
+            }
 
-                if (releaseWorkLogs.Any(rWLog => rWLog.Staff.OnTimeId == taskUserId))
-                {
-                    releaseWorkLogs.Where(rWLog => rWLog.Staff.OnTimeId == taskUserId).ToList().ForEach(rWLog =>
+            if (task.User != null)
+            {
+                taskUserId = task.User.UserId;
+            }
+
+            if (releaseWorkLogs.Any(rWLog => rWLog.Staff.OnTimeId == taskUserId))
+            {
+                releaseWorkLogs.Where(rWLog => rWLog.Staff.OnTimeId == taskUserId).ToList().ForEach(rWLog =>
                     {
-                        rWLog.HoursRemainingOnRelease += (task.IsCompleted) ? 0 : statistics["hoursRemainingForTask"];
+                        rWLog.HoursRemainingOnRelease += task.IsCompleted ? 0 : statistics["hoursRemainingForTask"];
                         rWLog.HoursWorkedOnRelease += statistics["hoursWorkedForTask"];
                         rWLog.HoursWorkedOnReleaseInLastWeek += statistics["hoursWorkedThisWeek"];
                     });
-                }
-                else
-                {
-                    var staffService = dependencyResolver.GetKernel().Get<IStaffService>();
+            }
+            else
+            {
+                var staffService = dependencyResolver.GetKernel().Get<IStaffService>();
 
-                    releaseWorkLogs.Add(new ReleaseWorkLog
-                    {
-                        Staff = staffService.GetByOnTimeId(taskUserId),
-                        HoursRemainingOnRelease = (task.IsCompleted) ? 0 : statistics["hoursRemainingForTask"],
-                        HoursWorkedOnRelease = statistics["hoursWorkedForTask"],
-                        HoursWorkedOnReleaseInLastWeek = statistics["hoursWorkedThisWeek"]
-                    });
-                }
+                releaseWorkLogs.Add(new ReleaseWorkLog
+                                        {
+                                            Staff = staffService.GetByOnTimeId(taskUserId),
+                                            HoursRemainingOnRelease = task.IsCompleted ? 0 : statistics["hoursRemainingForTask"],
+                                            HoursWorkedOnRelease = statistics["hoursWorkedForTask"],
+                                            HoursWorkedOnReleaseInLastWeek = statistics["hoursWorkedThisWeek"]
+                                        });
             }
         }
 
@@ -238,27 +255,29 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
 
             foreach (var release in matchingReleases)
             {
-                if (release != null)
+                if (release == null)
                 {
-                    var domainRelease = new Release
-                    {
-                        OnTimeId = release.ReleaseId,
-                        ParentReleaseId = release.ParentReleaseId,
-                        Name = release.Name,
-                        IsActive = release.IsActive,
-                        DueDate = release.DueDate,
-                        ReleaseNotes = release.ReleaseNotes,
-                        ReleaseType = dependencyResolver.GetKernel().Get<IReleaseTypeService>().GetByOnTimeId(release.ReleaseTypeId),
-                        ReleaseStatusType = dependencyResolver.GetKernel().Get<IReleaseStatusTypeService>().GetByOnTimeId(release.ReleaseStatusTypeId),
-                    };
-
-                    InsertStatisticsForRelease(release, ref domainRelease);
-                    InsertProjectsForRelease(release, ref domainRelease);
-
-                    dependencyResolver.GetKernel().Get<IReleaseService>().InsertOrUpdate(domainRelease);
-
-                    notifyHandler.HandleUpdates(dependencyResolver.GetKernel().Get<IReleaseService>().GetByOnTimeId(domainRelease.OnTimeId));
+                    continue;
                 }
+
+                var domainRelease = new Release
+                                        {
+                                            OnTimeId = release.ReleaseId,
+                                            ParentReleaseId = release.ParentReleaseId,
+                                            Name = release.Name,
+                                            IsActive = release.IsActive,
+                                            DueDate = release.DueDate,
+                                            ReleaseNotes = release.ReleaseNotes,
+                                            ReleaseType = dependencyResolver.GetKernel().Get<IReleaseTypeService>().GetByOnTimeId(release.ReleaseTypeId),
+                                            ReleaseStatusType = dependencyResolver.GetKernel().Get<IReleaseStatusTypeService>().GetByOnTimeId(release.ReleaseStatusTypeId),
+                                        };
+
+                InsertStatisticsForRelease(release, ref domainRelease);
+                InsertProjectsForRelease(release, ref domainRelease);
+
+                dependencyResolver.GetKernel().Get<IReleaseService>().InsertOrUpdate(domainRelease);
+
+                notifyHandler.HandleUpdates(dependencyResolver.GetKernel().Get<IReleaseService>().GetByOnTimeId(domainRelease.OnTimeId));
             }
         }
 
@@ -269,27 +288,17 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         {
             var onTimeUsers = dependencyResolver.GetKernel().Get<IOnTimeUserService>().GetAll(false);
 
-            onTimeUsers.Add
-                (
-                new Data.User
-                {
-                    UserId = -1,
-                    FirstName = "Unknown",
-                    LastName = string.Empty,
-                    IsActive = true
-                }
-                );
+            onTimeUsers.Add(
+                new Data.User { UserId = -1, FirstName = "Unknown", LastName = string.Empty, IsActive = true });
 
-            foreach (var user in onTimeUsers)
+            foreach (var domainStaffMember in onTimeUsers.Select(user => new Staff
+                                                                             {
+                                                                                 OnTimeId = user.UserId,
+                                                                                 FirstName = user.FirstName,
+                                                                                 LastName = user.LastName,
+                                                                                 IsActive = user.IsActive
+                                                                             }))
             {
-                var domainStaffMember = new Staff
-                {
-                    OnTimeId = user.UserId,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    IsActive = user.IsActive
-                };
-
                 dependencyResolver.GetKernel().Get<IStaffService>().InsertOrUpdate(domainStaffMember);
             }
         }
@@ -301,14 +310,12 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         {
             var releaseTypesOnOnTime = dependencyResolver.GetKernel().Get<IOnTimeReleaseTypeService>().GetAll();
 
-            foreach (var releaseType in releaseTypesOnOnTime)
+            foreach (var domainReleaseType in releaseTypesOnOnTime.Select(releaseType => new ReleaseType
+                                                                                             {
+                                                                                                 OnTimeId = releaseType.ReleaseTypeId,
+                                                                                                 Name = releaseType.Name
+                                                                                             }))
             {
-                var domainReleaseType = new ReleaseType
-                {
-                    OnTimeId = releaseType.ReleaseTypeId,
-                    Name = releaseType.Name
-                };
-
                 dependencyResolver.GetKernel().Get<IReleaseTypeService>().InsertOrUpdate(domainReleaseType);
             }
         }

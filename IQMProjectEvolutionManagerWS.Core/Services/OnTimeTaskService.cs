@@ -1,45 +1,64 @@
-﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Data;
-using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
-using IQMProjectEvolutionManagerWS.Data.Repository;
-using System.Collections.Generic;
-using System.Linq;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OnTimeTaskService.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The service to interact with the OnTime Task repository.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Core.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+    using IQMProjectEvolutionManagerWS.Data;
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
+    using IQMProjectEvolutionManagerWS.Data.Repository;
+
     /// <summary>
     /// The service to interact with the OnTime Task repository. 
     /// </summary>
     public class OnTimeTaskService : IOnTimeTaskService
     {
-        private readonly IOnTimeRepository<Task> _repository;
+        /// <summary>
+        /// The repository.
+        /// </summary>
+        private readonly IOnTimeRepository<Task> repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTimeTaskService"/> class.
         /// </summary>
         public OnTimeTaskService()
         {
-            _repository = new OnTimeRepository<Task>();
+            this.repository = new OnTimeRepository<Task>();
         }
 
         /// <summary>
-        /// Gets all.
+        /// The get all.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         public IList<Task> GetAll()
         {
-            return _repository.GetAll();
+            return this.repository.GetAll();
         }
 
         /// <summary>
-        /// Gets the list of Tasks by release.
+        /// The get by release.
         /// </summary>
-        /// <param name="release">The release.</param>
-        /// <returns></returns>
+        /// <param name="release">
+        /// The release.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         public IList<Task> GetByRelease(Release release)
         {
             // If release is not null, then get the collection of Task objects that are linked to the release. 
-            return release != null ? GetAll().Where(tsk => tsk.Release.ReleaseId == release.ReleaseId).ToList() : null;
+            return release != null ? this.GetAll().Where(tsk => tsk.Release.ReleaseId == release.ReleaseId).ToList() : null;
         }
     }
 }

@@ -1,43 +1,63 @@
-﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Data;
-using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
-using IQMProjectEvolutionManagerWS.Data.Repository;
-using System.Collections.Generic;
-using System.Linq;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OnTimeReleaseStatusTypeService.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The service to interact with the OnTime ReleaseStatusType repository.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Core.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+    using IQMProjectEvolutionManagerWS.Data;
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
+    using IQMProjectEvolutionManagerWS.Data.Repository;
+
     /// <summary>
     /// The service to interact with the OnTime ReleaseStatusType repository. 
     /// </summary>
     public class OnTimeReleaseStatusTypeService : IOnTimeReleaseStatusTypeService
     {
-        private readonly IOnTimeRepository<ReleaseStatusType> _repository;
+        /// <summary>
+        /// The _repository.
+        /// </summary>
+        private readonly IOnTimeRepository<ReleaseStatusType> repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTimeReleaseStatusTypeService"/> class.
         /// </summary>
         public OnTimeReleaseStatusTypeService()
         {
-            _repository = new OnTimeRepository<ReleaseStatusType>();
+            this.repository = new OnTimeRepository<ReleaseStatusType>();
         }
 
         /// <summary>
-        /// Gets all.
+        /// The get all.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         public IList<ReleaseStatusType> GetAll()
         {
-            return _repository.GetAll();
+            return this.repository.GetAll();
         }
 
         /// <summary>
-        /// Gets the single ReleaseStatusType by its name and the Id of its 
-        /// associated ReleaseType.
+        /// The get by name and release type.
         /// </summary>
-        /// <param name="releaseStatusTypeName">Name of the release status type.</param>
-        /// <param name="releaseTypeId">The release type identifier.</param>
-        /// <returns></returns>
+        /// <param name="releaseStatusTypeName">
+        /// The release status type name.
+        /// </param>
+        /// <param name="releaseTypeId">
+        /// The release type id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReleaseStatusType"/>.
+        /// </returns>
         public ReleaseStatusType GetByNameAndReleaseType(string releaseStatusTypeName, int releaseTypeId)
         {
             // Remove any leading or trailing spaces prior to comparison. 
@@ -47,7 +67,7 @@ namespace IQMProjectEvolutionManagerWS.Core.Services
             }
 
             // Get the ReleaseStatusType that matches the releaseStatusTypeName and releaseTypeId. 
-            return GetAll().SingleOrDefault(rSType => rSType.Name.Equals(releaseStatusTypeName) && rSType.ReleaseTypeId == releaseTypeId);
+            return this.GetAll().SingleOrDefault(rSType => rSType.Name.Equals(releaseStatusTypeName) && rSType.ReleaseTypeId == releaseTypeId);
         }
     }
 }

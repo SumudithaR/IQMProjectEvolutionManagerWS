@@ -1,17 +1,18 @@
-﻿using IQMProjectEvolutionManager.Core.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IDataManagementHandler.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   Defines the IDataManagementHandler type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers
 {
-    using IQMProjectEvolutionManagerWS.Business.Handlers;
-    using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
-
+    /// <summary>
+    /// The DataManagementHandler interface.
+    /// </summary>
     public interface IDataManagementHandler
     {
-        //void Run(IDependencyResolver _dependencyResolver, NotifyHandler _notifyHandler);
     }
 }

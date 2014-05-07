@@ -1,11 +1,33 @@
-﻿namespace IQMProjectEvolutionManagerWS
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ProjectInstaller.Designer.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The project installer.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace IQMProjectEvolutionManagerWS
 {
-    partial class ProjectInstaller
+    /// <summary>
+    /// The project installer.
+    /// </summary>
+    public partial class ProjectInstaller
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// The service process installer 1.
+        /// </summary>
+        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
+
+        /// <summary>
+        /// The service installer 1.
+        /// </summary>
+        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -13,10 +35,11 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (this.components != null))
             {
-                components.Dispose();
+                this.components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -52,8 +75,5 @@
         }
 
         #endregion
-
-        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
-        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
     }
 }

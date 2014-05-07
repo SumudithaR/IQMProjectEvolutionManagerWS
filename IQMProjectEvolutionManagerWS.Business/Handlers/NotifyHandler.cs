@@ -1,36 +1,54 @@
-﻿using IQMProjectEvolutionManager.Core.Domain;
-using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ninject;
-using IQMProjectEvolutionManager.Core.Interfaces.Services;
-using Ninject.Parameters;
-using IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers;
-using IQMProjectEvolutionManagerWS.Notify.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Notify.Domain;
-using IQMProjectEvolutionManagerWS.Business.Handlers.Notification;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="NotifyHandler.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   Defines the NotifyHandler type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Business.Handlers
 {
+    using IQMProjectEvolutionManager.Core.Domain;
+
+    using IQMProjectEvolutionManagerWS.Business.Handlers.Notification;
+    using IQMProjectEvolutionManagerWS.Business.Interfaces.DependencyResolution.Resolver;
+    using IQMProjectEvolutionManagerWS.Business.Interfaces.Handlers;
+
+    /// <summary>
+    /// The notify handler.
+    /// </summary>
     public class NotifyHandler : INotifyHandler
     {
+        /// <summary>
+        /// The dependency resolver.
+        /// </summary>
         private readonly IDependencyResolver dependencyResolver;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotifyHandler"/> class.
+        /// </summary>
+        /// <param name="resolver">
+        /// The resolver.
+        /// </param>
         public NotifyHandler(IDependencyResolver resolver)
         {
-            dependencyResolver = resolver;
+            this.dependencyResolver = resolver;
         }
 
+        /// <summary>
+        /// The handle updates.
+        /// </summary>
+        /// <param name="release">
+        /// The release.
+        /// </param>
         public void HandleUpdates(Release release)
         {
-            var calendarNotificationHandler = new CalendarNotificationHandler(dependencyResolver);
+            var calendarNotificationHandler = new CalendarNotificationHandler(this.dependencyResolver);
             calendarNotificationHandler.UpdateCalendarsWithRelease(release);
 
-            var smsNotificationHandler = new SMSNotificationHandler(dependencyResolver);
-            smsNotificationHandler.SendSMSForRelease(release);
+            var smsNotificationHandler = new SmsNotificationHandler(this.dependencyResolver);
+            smsNotificationHandler.SendSmsForRelease(release);
         }
     }
 }

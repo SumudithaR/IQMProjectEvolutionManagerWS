@@ -1,9 +1,19 @@
-﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Core.Services;
-using Ninject.Modules;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="WsCoreServiceModule.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The data service module
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Core.DependencyResolution.Modules
 {
+    using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+    using IQMProjectEvolutionManagerWS.Core.Services;
+
+    using Ninject.Modules;
+
     /// <summary>
     /// The data service module
     /// </summary>

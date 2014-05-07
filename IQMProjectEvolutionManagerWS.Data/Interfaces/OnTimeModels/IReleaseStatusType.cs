@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IReleaseStatusType.cs" company="IQM Software">
+//   Sumuditha Ranawka 2014.
+// </copyright>
+// <summary>
+//   Defines the IReleaseStatusType type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels
 {
+    /// <summary>
+    /// The ReleaseStatusType interface.
+    /// </summary>
     public interface IReleaseStatusType
     {
     }

@@ -1,6 +1,18 @@
-﻿namespace IQMProjectEvolutionManagerWS
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BusinessService.Designer.cs" company="IQm Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The business service.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace IQMProjectEvolutionManagerWS
 {
-    partial class BusinessService
+    /// <summary>
+    /// The business service.
+    /// </summary>
+    public partial class BusinessService
     {
         /// <summary> 
         /// Required designer variable.
@@ -13,10 +25,11 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (this.components != null))
             {
-                components.Dispose();
+                this.components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 

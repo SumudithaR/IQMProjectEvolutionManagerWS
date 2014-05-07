@@ -1,30 +1,51 @@
-﻿using System;
-using System.Configuration;
-using System.ServiceProcess;
-using System.Threading;
-using System.Threading.Tasks;
-using IQMProjectEvolutionManagerWS.Business.Handlers;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BusinessService.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   Defines the BusinessService type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS
 {
+    using System;
+    using System.Configuration;
+    using System.ServiceProcess;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using IQMProjectEvolutionManagerWS.Business.Handlers;
+
+    /// <summary>
+    /// The business service.
+    /// </summary>
     public partial class BusinessService : ServiceBase
     {
         /// <summary>
         /// The _cancellation token source
         /// </summary>
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource cancellationTokenSource;
 
         /// <summary>
         /// The _base process
         /// </summary>
-        private BaseHandler _baseProcess;
+        private BaseHandler baseProcess;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BusinessService"/> class.
         /// </summary>
         public BusinessService()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Called when [debug].
+        /// </summary>
+        public void OnDebug()
+        {
+            this.OnStart(null);
         }
 
         /// <summary>
@@ -33,27 +54,32 @@ namespace IQMProjectEvolutionManagerWS
         /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            var token = _cancellationTokenSource.Token;
+            this.cancellationTokenSource = new CancellationTokenSource();
+            var token = this.cancellationTokenSource.Token;
 
-            Task.Factory.StartNew(() =>
-            {
-                _baseProcess = new BaseHandler();
+            Task.Factory.StartNew(
+                () =>
+                    {
+                        this.baseProcess = new BaseHandler();
 
                 while (true)
                 {
-                    _baseProcess.Start();
+                    this.baseProcess.Start();
                     Thread.Sleep(TimeSpan.FromMilliseconds(
                         double.Parse(ConfigurationManager.AppSettings["RefreshPeriod"])));
 
-                    if (!token.IsCancellationRequested) continue;
+                    if (!token.IsCancellationRequested)
+                    {
+                        continue;
+                    }
+
                     Console.WriteLine("IQM Project Evolution Manager Business Service has been stopped.");
                     break;
                 }
 
-                _baseProcess = null;
-
-            }, token);
+                this.baseProcess = null;
+            },
+                token);
         }
 
         /// <summary>
@@ -61,15 +87,7 @@ namespace IQMProjectEvolutionManagerWS
         /// </summary>
         protected override void OnStop()
         {
-            _cancellationTokenSource.Cancel();
-        }
-
-        /// <summary>
-        /// Called when [debug].
-        /// </summary>
-        public void OnDebug()
-        {
-            OnStart(null);
+            this.cancellationTokenSource.Cancel();
         }
     }
 }

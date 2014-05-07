@@ -1,24 +1,40 @@
-﻿using IQMProjectEvolutionManagerWS.Data;
-using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IOnTimeReleaseTypeService.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The interface of the service to interact with the OnTime ReleaseType repository.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Core.Interfaces.Services
 {
+    using System.Collections.Generic;
+
+    using IQMProjectEvolutionManagerWS.Data;
+
     /// <summary>
     /// The interface of the service to interact with the OnTime ReleaseType repository. 
     /// </summary>
     public interface IOnTimeReleaseTypeService
     {
-        /// <summary>s
-        /// Gets all.
+        /// <summary>
+        /// The get all.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         IList<ReleaseType> GetAll();
 
         /// <summary>
-        /// Gets the single ReleaseType by its name.
+        /// The get by name.
         /// </summary>
-        /// <param name="releaseTypeName">Name of the release type.</param>
-        /// <returns></returns>
+        /// <param name="releaseTypeName">
+        /// The release type name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReleaseType"/>.
+        /// </returns>
         ReleaseType GetByName(string releaseTypeName);
     }
 }

@@ -1,43 +1,61 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Calendar.v3;
-using Google.Apis.Calendar.v3.Data;
-using Google.Apis.Services;
-using IQMProjectEvolutionManager.Core.Interfaces.Domain;
-using IQMProjectEvolutionManagerWS.Notify.Authentication;
-using IQMProjectEvolutionManagerWS.Notify.Domain;
-using IQMProjectEvolutionManagerWS.Notify.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GoogleCalendarService.cs" company="IQm Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The google calendar service.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Notify.Services
 {
+    using System;
+    using System.Configuration;
+    using System.Linq;
+
+    using Google.Apis.Auth.OAuth2;
+    using Google.Apis.Calendar.v3;
+    using Google.Apis.Calendar.v3.Data;
+    using Google.Apis.Http;
+    using Google.Apis.Services;
+
+    using IQMProjectEvolutionManagerWS.Notify.Authentication;
+    using IQMProjectEvolutionManagerWS.Notify.Domain;
+    using IQMProjectEvolutionManagerWS.Notify.Interfaces.Services;
+
+    /// <summary>
+    /// The google calendar service.
+    /// </summary>
     public class GoogleCalendarService : ICalendarService
     {
+        /// <summary>
+        /// The service access name.
+        /// </summary>
         private readonly string serviceAccessName;
 
-        private CalendarService GetService(UserCredential credential)
-        {
-            var calendarService = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ConfigurationManager.AppSettings["ApplicationName"],
-            });
-
-            return calendarService;
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GoogleCalendarService"/> class.
+        /// </summary>
+        /// <param name="accessName">
+        /// The access name.
+        /// </param>
         public GoogleCalendarService(string accessName)
         {
-            serviceAccessName = accessName;
+            this.serviceAccessName = accessName;
         }
 
+        /// <summary>
+        /// The add or update calendar.
+        /// </summary>
+        /// <param name="calendar">
+        /// The calendar.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string AddOrUpdateCalendar(GenericCalendar calendar)
         {
-            var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
             var calendarService = GetService(credential);
 
             var cal = (calendar.CalendarId != null && calendarService.CalendarList.List().Execute().Items.Any(dCal => dCal.Id.Equals(calendar.CalendarId)))
@@ -67,55 +85,84 @@ namespace IQMProjectEvolutionManagerWS.Notify.Services
             return cal.Id;
         }
 
+        /// <summary>
+        /// The get calendar.
+        /// </summary>
+        /// <param name="calendarId">
+        /// The calendar id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GenericCalendar"/>.
+        /// </returns>
         public GenericCalendar GetCalendar(string calendarId)
         {
-            if (!calendarId.Equals(string.Empty))
+            if (calendarId.Equals(string.Empty))
             {
-                calendarId = calendarId.Trim();
+                return null;
+            }
 
-                var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
-                var calendarService = GetService(credential);
+            calendarId = calendarId.Trim();
 
-                var cal = (calendarService.CalendarList.List().Execute().Items.Any(dCal => dCal.Id.Equals(calendarId))) ? calendarService.Calendars.Get(calendarId).Execute() : null;
-                if (cal != null)
-                {
-                    return new GenericCalendar()
-                    {
-                        CalendarId = cal.Id,
-                        Description = cal.Description,
-                        Location = cal.Location,
-                        Summary = cal.Summary,
-                        TimeZone = cal.TimeZone
-                    };
-                }
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var calendarService = GetService(credential);
+
+            var cal = calendarService.CalendarList.List().Execute().Items.Any(dCal => dCal.Id.Equals(calendarId)) ? calendarService.Calendars.Get(calendarId).Execute() : null;
+            if (cal != null)
+            {
+                return new GenericCalendar()
+                           {
+                               CalendarId = cal.Id,
+                               Description = cal.Description,
+                               Location = cal.Location,
+                               Summary = cal.Summary,
+                               TimeZone = cal.TimeZone
+                           };
             }
 
             return null;
         }
 
+        /// <summary>
+        /// The delete calendar.
+        /// </summary>
+        /// <param name="calendarId">
+        /// The calendar id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool DeleteCalendar(string calendarId)
         {
-            if (!calendarId.Equals(string.Empty))
+            if (calendarId.Equals(string.Empty))
             {
-                calendarId = calendarId.Trim();
-
-                var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
-                var calendarService = GetService(credential);
-
-                var response = (calendarService.CalendarList.List().Execute().Items.Any(dCal => dCal.Id.Equals(calendarId))) ? calendarService.Calendars.Delete(calendarId).Execute() : null;
-
-                if (response.Equals(string.Empty))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            calendarId = calendarId.Trim();
+
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var calendarService = GetService(credential);
+
+            var response = calendarService.CalendarList.List().Execute().Items.Any(dCal => dCal.Id.Equals(calendarId)) ? calendarService.Calendars.Delete(calendarId).Execute() : null;
+
+            return response != null && response.Equals(string.Empty);
         }
 
+        /// <summary>
+        /// The add or update event.
+        /// </summary>
+        /// <param name="calendarEvent">
+        /// The calendar event.
+        /// </param>
+        /// <param name="calendarId">
+        /// The calendar id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string AddOrUpdateEvent(GenericCalendarEvent calendarEvent, string calendarId)
         {
-            var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
             var calendarService = GetService(credential);
 
             var calEvent = (calendarEvent.GenericCalendarEventId != null && calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(calendarEvent.GenericCalendarEventId)))
@@ -174,52 +221,95 @@ namespace IQMProjectEvolutionManagerWS.Notify.Services
             return calEvent.Id;
         }
 
+        /// <summary>
+        /// The get event.
+        /// </summary>
+        /// <param name="eventId">
+        /// The event id.
+        /// </param>
+        /// <param name="calendarId">
+        /// The calendar id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GenericCalendarEvent"/>.
+        /// </returns>
         public GenericCalendarEvent GetEvent(string eventId, string calendarId)
         {
-            if (!eventId.Equals(string.Empty) && !calendarId.Equals(string.Empty))
+            if (eventId.Equals(string.Empty) || calendarId.Equals(string.Empty))
             {
-                eventId = eventId.Trim();
-                calendarId = calendarId.Trim();
+                return null;
+            }
 
-                var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
-                var calendarService = GetService(credential);
+            eventId = eventId.Trim();
+            calendarId = calendarId.Trim();
 
-                var calEvent = (calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId))) ? calendarService.Events.Get(calendarId, eventId).Execute() : null;
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var calendarService = GetService(credential);
 
-                if (calEvent != null)
-                {
-                    return new GenericCalendarEvent()
-                    {
-                        Description = calEvent.Description,
-                        EndDate = calEvent.End.DateTime,
-                        Location = calEvent.Location,
-                        StartDate = calEvent.Start.DateTime,
-                        Title = calEvent.Summary,
-                        TimeZone = calEvent.Start.TimeZone,
-                        Visibility = calEvent.Visibility,
-                    };
-                }
+            var calEvent = calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId)) ? calendarService.Events.Get(calendarId, eventId).Execute() : null;
+
+            if (calEvent != null)
+            {
+                return new GenericCalendarEvent()
+                           {
+                               Description = calEvent.Description,
+                               EndDate = calEvent.End.DateTime,
+                               Location = calEvent.Location,
+                               StartDate = calEvent.Start.DateTime,
+                               Title = calEvent.Summary,
+                               TimeZone = calEvent.Start.TimeZone,
+                               Visibility = calEvent.Visibility,
+                           };
             }
 
             return null;
         }
 
+        /// <summary>
+        /// The delete event.
+        /// </summary>
+        /// <param name="eventId">
+        /// The event id.
+        /// </param>
+        /// <param name="calendarId">
+        /// The calendar id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool DeleteEvent(string eventId, string calendarId)
         {
-            if (!eventId.Equals(string.Empty) && !calendarId.Equals(string.Empty))
+            if (eventId.Equals(string.Empty) || calendarId.Equals(string.Empty))
             {
-                var credential = GoogleAuthenticator.GetAuthenticatedCredential(serviceAccessName, new[] { CalendarService.Scope.Calendar });
-                var calendarService = GetService(credential);
-
-                var response = (calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId))) ? calendarService.Events.Delete(calendarId, eventId).Execute() : null;
-
-                if (response.Equals(string.Empty))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
+            var calendarService = GetService(credential);
+
+            var response = calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId)) ? calendarService.Events.Delete(calendarId, eventId).Execute() : null;
+
+            return response.Equals(string.Empty);
+        }
+
+        /// <summary>
+        /// The get service.
+        /// </summary>
+        /// <param name="credential">
+        /// The credential.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CalendarService"/>.
+        /// </returns>
+        private static CalendarService GetService(IConfigurableHttpClientInitializer credential)
+        {
+            var calendarService = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ConfigurationManager.AppSettings["ApplicationName"],
+            });
+
+            return calendarService;
         }
     }
 }

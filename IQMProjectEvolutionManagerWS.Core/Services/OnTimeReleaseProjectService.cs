@@ -1,56 +1,75 @@
-﻿using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
-using IQMProjectEvolutionManagerWS.Data;
-using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
-using IQMProjectEvolutionManagerWS.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OnTimeReleaseProjectService.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   The service to interact with the OnTime ReleaseProject repository.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    using IQMProjectEvolutionManagerWS.Core.Interfaces.Services;
+    using IQMProjectEvolutionManagerWS.Data;
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.Repository;
+    using IQMProjectEvolutionManagerWS.Data.Repository;
+
     /// <summary>
     /// The service to interact with the OnTime ReleaseProject repository. 
     /// </summary>
     public class OnTimeReleaseProjectService : IOnTimeReleaseProjectService
     {
-        private readonly IOnTimeRepository<ReleaseProject> _repository;
+        /// <summary>
+        /// The _repository.
+        /// </summary>
+        private readonly IOnTimeRepository<ReleaseProject> repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTimeReleaseProjectService"/> class.
         /// </summary>
         public OnTimeReleaseProjectService()
         {
-            _repository = new OnTimeRepository<ReleaseProject>();
+            this.repository = new OnTimeRepository<ReleaseProject>();
         }
 
         /// <summary>
-        /// Gets all.
+        /// The get all.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         public IList<ReleaseProject> GetAll()
         {
-            return _repository.GetAll();
+            return this.repository.GetAll();
         }
 
         /// <summary>
-        /// Gets the associated projects. 
-        /// The associated projects are the projects 
-        /// linked to the release via the 
-        /// ReleaseProject table.
+        /// The get associated projects.
         /// </summary>
-        /// <param name="release">The release.</param>
-        /// <returns></returns>
+        /// <param name="release">
+        /// The release.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
         public IList<Project> GetAssociatedProjects(Release release)
         {
-            if (release == null) return null;
+            if (release == null)
+            {
+                return null;
+            }
 
             /* 
              * Filter the records in the ReleaseProject table by the releaseId and select only the linked Projects, 
              * then return these Projects as a List collection. 
              */
             Expression<Func<ReleaseProject, bool>> clause = rProj => rProj.ReleaseId == release.ReleaseId;
-            return _repository.GetAll(clause).Select(rP => rP.Project).ToList();
+            return this.repository.GetAll(clause).Select(rP => rP.Project).ToList();
         }
     }
 }

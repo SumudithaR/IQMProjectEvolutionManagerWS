@@ -1,13 +1,23 @@
-﻿using System.ServiceProcess;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Program.cs" company="IQM Software">
+//   Sumuditha Ranawaka 2014.
+// </copyright>
+// <summary>
+//   Defines the Program type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace IQMProjectEvolutionManagerWS
 {
-    static class Program
+    /// <summary>
+    /// The program.
+    /// </summary>
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        public static void Main()
         {
 #if DEBUG
             var businessService = new BusinessService();

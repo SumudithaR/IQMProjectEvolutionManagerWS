@@ -35,16 +35,16 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers
         /// <summary>
         /// The run.
         /// </summary>
-        /// <param name="_dependencyResolver">
-        /// The _dependency resolver.
+        /// <param name="dependencyResolver">
+        /// The dependency Resolver.
         /// </param>
-        /// <param name="_filterDays">
+        /// <param name="filterDays">
         /// The _filter days.
         /// </param>
-        public static void Run(IDependencyResolver _dependencyResolver, int _filterDays)
+        public static void Run(IDependencyResolver dependencyResolver, int filterDays)
         {
-            dependencyResolver = _dependencyResolver;
-            filterDays = _filterDays;
+            DataCleanupHandler.dependencyResolver = dependencyResolver;
+            DataCleanupHandler.filterDays = filterDays;
 
             CleanupReleases();
             CleanupProjects();
