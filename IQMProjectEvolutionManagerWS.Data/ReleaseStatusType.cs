@@ -11,8 +11,10 @@ namespace IQMProjectEvolutionManagerWS.Data
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class ReleaseStatusType
+
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels;
+
+    public partial class ReleaseStatusType : IReleaseStatusType
     {
         public ReleaseStatusType()
         {

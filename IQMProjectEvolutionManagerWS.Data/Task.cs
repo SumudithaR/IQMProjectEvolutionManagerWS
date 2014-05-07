@@ -11,8 +11,10 @@ namespace IQMProjectEvolutionManagerWS.Data
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Task
+
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels;
+
+    public partial class Task : ITask
     {
         public Task()
         {

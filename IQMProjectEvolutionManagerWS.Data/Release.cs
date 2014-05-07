@@ -11,8 +11,10 @@ namespace IQMProjectEvolutionManagerWS.Data
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Release
+
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels;
+
+    public partial class Release : IRelease
     {
         public Release()
         {

@@ -11,8 +11,10 @@ namespace IQMProjectEvolutionManagerWS.Data
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class TimeUnitType
+
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels;
+
+    public partial class TimeUnitType : ITimeUnitType
     {
         public TimeUnitType()
         {

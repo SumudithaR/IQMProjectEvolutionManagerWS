@@ -11,8 +11,10 @@ namespace IQMProjectEvolutionManagerWS.Data
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class WorkLog
+
+    using IQMProjectEvolutionManagerWS.Data.Interfaces.OnTimeModels;
+
+    public partial class WorkLog : IWorkLog
     {
         public int WorkLogId { get; set; }
         public System.DateTime WorkLogDateTime { get; set; }

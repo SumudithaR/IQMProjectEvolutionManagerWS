@@ -155,7 +155,6 @@
     <Compile Include="DependencyResolution\Modules\WSNotifyServiceModule.cs" />
     <Compile Include="Domain\GenericCalendar.cs" />
     <Compile Include="Domain\GenericCalendarEvent.cs" />
-    <Compile Include="Domain\GenericInstantMessage.cs" />
     <Compile Include="Domain\GenericSMS.cs" />
     <Compile Include="Enums\NotificationColours.cs" />
     <Compile Include="Interfaces\Domain\IGenericCalendar.cs" />
