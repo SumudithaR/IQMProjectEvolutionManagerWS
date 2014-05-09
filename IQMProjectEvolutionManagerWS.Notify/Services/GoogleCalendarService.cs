@@ -72,7 +72,7 @@ namespace IQMProjectEvolutionManagerWS.Notify.Services
             }
             else
             {
-                cal = calendarService.Calendars.Insert(
+                 cal = calendarService.Calendars.Insert(
                     new Calendar()
                     {
                         Description = calendar.Description,
