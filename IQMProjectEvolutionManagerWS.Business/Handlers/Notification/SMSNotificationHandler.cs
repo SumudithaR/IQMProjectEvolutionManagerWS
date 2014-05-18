@@ -92,7 +92,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
             foreach (var notifier in smsNotifiers)
             {
                 if (notifier == null
-                    || DateTime.Now.AddDays(notifier.Subscriber.SmsNotificationPeriod) != release.DueDate)
+                    || DateTime.Now.AddDays(notifier.Subscriber.SmsNotificationPeriod).Date != release.DueDate.Date)
                 {
                     continue;
                 }
