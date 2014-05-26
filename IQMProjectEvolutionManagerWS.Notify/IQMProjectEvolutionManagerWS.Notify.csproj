@@ -78,7 +78,7 @@
       <HintPath>..\packages\IQM.Common.1.0.24.70\lib\net40\IQM.Common.dll</HintPath>
     </Reference>
     <Reference Include="IQMProjectEvolutionManager.Core">
-      <HintPath>..\..\iqm-project-evolution-manager-dev\IQMProjectEvolutionManager.Core\bin\Debug\IQMProjectEvolutionManager.Core.dll</HintPath>
+      <HintPath>..\..\IQMProjectEvolutionManager\IQMProjectEvolutionManager.Core\bin\Debug\IQMProjectEvolutionManager.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -172,6 +172,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

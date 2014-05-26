@@ -65,7 +65,7 @@
       <HintPath>..\packages\IQM.Common.Web.1.0.5.41\lib\net40\IQM.Common.Web.dll</HintPath>
     </Reference>
     <Reference Include="IQMProjectEvolutionManager.Core">
-      <HintPath>..\..\iqm-project-evolution-manager-dev\IQMProjectEvolutionManager.Core\bin\Debug\IQMProjectEvolutionManager.Core.dll</HintPath>
+      <HintPath>..\..\IQMProjectEvolutionManager\IQMProjectEvolutionManager.Core\bin\Debug\IQMProjectEvolutionManager.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
