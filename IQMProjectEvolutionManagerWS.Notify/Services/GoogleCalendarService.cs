@@ -246,7 +246,16 @@ namespace IQMProjectEvolutionManagerWS.Notify.Services
             var credential = GoogleAuthenticator.GetAuthenticatedCredential(this.serviceAccessName, new[] { CalendarService.Scope.Calendar });
             var calendarService = GetService(credential);
 
-            var calEvent = calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId)) ? calendarService.Events.Get(calendarId, eventId).Execute() : null;
+            var calEvent = new Event();
+
+            try
+            {
+                calEvent = calendarService.Events.List(calendarId).Execute().Items.Any(dEve => dEve.Id.Equals(eventId)) ? calendarService.Events.Get(calendarId, eventId).Execute() : null;
+            }
+            catch (Exception)
+            {
+                calEvent = null;
+            }
 
             if (calEvent != null)
             {

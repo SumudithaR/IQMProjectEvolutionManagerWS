@@ -136,14 +136,14 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
                 var smsMessage = new GenericSms()
                                      {
                                          Message = "The release: " + release.Name + ", linked to the project(s): " + linkedProjects + ", is due on: " + release.DueDate.ToShortDateString() +
-                                                   ". The release statistics are as follows. The percentage complete is: " + release.PercentageComplete + "%, The total hours worked is: " + release.HoursWorked +
-                                                   ", The total hours remaining is: " + release.HoursRemaining + ".",
+                                                   ". The release statistics are as follows. The percentage complete is: " + Math.Round(release.PercentageComplete) + "%, The total hours worked is: " + Math.Round(release.HoursWorked) +
+                                                   ", The total hours remaining is: " + Math.Round(release.HoursRemaining) + ".",
                                          Mobile = notifier.Subscriber.Mobile
                                      };
 
                 smsMessage.GenericSmsId = smsService.SendSms(smsMessage);
 
-                userNotifierLogService.InsertOrUpdate(
+                userNotifierLogService.Insert(
                     new SubscriberNotifierLog()
                         {
                             TransactionId = smsMessage.GenericSmsId,

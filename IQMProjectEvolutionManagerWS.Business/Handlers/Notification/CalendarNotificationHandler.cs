@@ -145,7 +145,7 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                     logEntry.TransactionId = calendarService.AddOrUpdateEvent(eventOnProvider, notifier.AccessId);
 
-                    userNotifierLogService.InsertOrUpdate(logEntry);
+                    CreateAndSaveSubscriberNotifierLogEntry(eventOnProvider, release, notifier);
                 }
                 else
                 {
@@ -165,20 +165,30 @@ namespace IQMProjectEvolutionManagerWS.Business.Handlers.Notification
 
                     calEvent.GenericCalendarEventId = calendarService.AddOrUpdateEvent(calEvent, notifier.AccessId);
 
-                    userNotifierLogService.InsertOrUpdate(
-                        new SubscriberNotifierLog()
-                            {
-                                TransactionId = calEvent.GenericCalendarEventId,
-                                RegisteredForId = release.ReleaseId,
-                                EndDate = calEvent.EndDate,
-                                Location = calEvent.Location,
-                                Message = calEvent.Description,
-                                SentSuccess = true,
-                                StartDate = calEvent.StartDate,
-                                Subject = calEvent.Title,
-                                SubscriberNotifier = notifier,
-                            });
+                    CreateAndSaveSubscriberNotifierLogEntry(calEvent, release, notifier);
                 }
+            }
+        }
+
+        public void CreateAndSaveSubscriberNotifierLogEntry(GenericCalendarEvent calendarEvent, Release release, SubscriberNotifier notifier)
+        {
+            var subscriberNotifierLogService = this.dependencyResolver.GetKernel().Get<ISubscriberNotifierLogService>();
+            var logEntry = new SubscriberNotifierLog()
+            {
+                TransactionId = calendarEvent.GenericCalendarEventId,
+                RegisteredForId = release.ReleaseId,
+                EndDate = calendarEvent.EndDate,
+                Location = calendarEvent.Location,
+                Message = calendarEvent.Description,
+                SentSuccess = true,
+                StartDate = calendarEvent.StartDate,
+                Subject = calendarEvent.Title,
+                SubscriberNotifier = notifier,
+            };
+
+            if (subscriberNotifierLogService.IsModified(logEntry) || !subscriberNotifierLogService.InDatabaseByTransactionId(logEntry))
+            {
+                subscriberNotifierLogService.Insert(logEntry);
             }
         }
     }
